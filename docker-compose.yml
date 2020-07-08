@@ -1,20 +1,6 @@
 version: '3.7'
 
 services:
-  mysql:
-    image: library/mysql:5.7
-    expose:
-    - 3306
-    container_name: mysql
-    env_file:
-    - ./.env
-    ports:
-    - 3307:3306
-    volumes:
-    - ./.docker/mysql/dev:/var/lib/mysql
-    networks:
-    - app-network
-
   nginx:
     build:
       context: ./.docker/nginx/
@@ -42,8 +28,6 @@ services:
     - ./.docker/php/app/logs:/var/www/dev/app/logs/:rw
     - ./.docker/.composer:/var/www/.composer
     - .:/var/www/html
-    depends_on:
-    - mysql
     networks:
     - app-network
 

@@ -4,7 +4,42 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-
+    app.default_currency_code: 'EUR'
+    app.eu_commission_rate: 0.01
+    app.non_eu_commission_rate: 0.02
+    app.files_directory: '%kernel.project_dir%/assets/files'
+    app.bin_list_url: '%env(BIN_LIST_URL)%'
+    app.rates_url: '%env(RATES_URL)%'
+    app.resources_dir: '%kernel.root_dir%/Resources'
+    app.serializer_mapping_dir: '%app.resources_dir%/Serializer'
+    app.in_memory_repository_data.eu_country_codes:
+        - 'AT'
+        - 'BE'
+        - 'BG'
+        - 'CY'
+        - 'CZ'
+        - 'DE'
+        - 'DK'
+        - 'EE'
+        - 'ES'
+        - 'FI'
+        - 'FR'
+        - 'GR'
+        - 'HR'
+        - 'HU'
+        - 'IE'
+        - 'IT'
+        - 'LT'
+        - 'LU'
+        - 'LV'
+        - 'MT'
+        - 'NL'
+        - 'PO'
+        - 'PT'
+        - 'RO'
+        - 'SE'
+        - 'SI'
+        - 'SK'
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -17,11 +52,44 @@ services:
         resource: '../src/*'
         exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
 
+    # Serialization
+    App\Services\Serializer\TransactionDenormalizer:
+        tags: [{name: serializer.normalizer, priority: 8}]
+
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
-    App\Controller\:
-        resource: '../src/Controller'
-        tags: ['controller.service_arguments']
+#    App\Controller\:
+#        resource: '../src/Controller'
+#        tags: ['controller.service_arguments']
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    # Commands
+    App\Services\Command\CalculateCommissionsCommand:
+        arguments:
+            $filesDirectory: '%app.files_directory%'
+
+    # Services
+    App\Domain\Service\TransactionService:
+        arguments:
+            $defaultCurrencyCode: '%app.default_currency_code%'
+            $euCommissionRate: '%app.eu_commission_rate%'
+            $nonEuCommissionRate: '%app.non_eu_commission_rate%'
+
+    # Repositories
+    App\Infrastructure\Repository\BinRepositoryInterface: '@App\Infrastructure\Repository\BinRepository'
+    App\Infrastructure\Repository\RateRepositoryInterface: '@App\Infrastructure\Repository\RateRepository'
+    App\Infrastructure\Repository\CountryCodeInterface: '@App\Infrastructure\Repository\CountryCodeRepository'
+
+    App\Infrastructure\Repository\BinRepository:
+        arguments:
+            $binListUrl: '%app.bin_list_url%'
+
+    App\Infrastructure\Repository\RateRepository:
+        arguments:
+            $ratesUrl: '%app.rates_url%'
+
+    App\Infrastructure\Repository\CountryCodeRepository:
+        arguments:
+            $euCountryCodes: '%app.in_memory_repository_data.eu_country_codes%'

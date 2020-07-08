@@ -27,9 +27,7 @@
 # Assets and user uploads
 /web/bundles/
 /web/uploads/
-
-# PHPUnit
-/phpunit.xml
+/assets/
 
 # Build data
 /build/
@@ -51,4 +49,8 @@ workspace.xml
 # Documentation Temp Files
 *.~vsdx
 
-
+###> symfony/phpunit-bridge ###
+.phpunit
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###

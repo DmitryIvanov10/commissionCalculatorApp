@@ -1,23 +1,17 @@
-# nginx-php-symfony-mysql-dockerized-boilerplate
-Boilerplate for Symfony projects in docker
+# commission-calculator-app
+Test app to calculate commissions
 
 ## Versions:
 **Symfony 4.4**
 
 **PHP 7.4.6**
 
-**MySQL 5.7**
-
 ## Install and run:
-1. ```git clone git@github.com:DmitryIvanov10/nginx-php-symfony-mysql-dockerized-boilerplate.git```
-2. ```cd nginx-php-symfony-mysql-dockerized-boilerplate```
+1. ```git clone git@github.com:DmitryIvanov10/commissionCalculatorApp.git```
+2. ```cd commissionCalculatorApp```
 3. ```docker-compose up --build -d```
-3. ```docker exec -it php sh```
-4. Inside php container: ```composer update``` and ```composer install```
-5. Add ```127.0.0.1 app.local``` to `/etc/hosts`
-6. Check if everything works and get `phpinfo()` at `app.local:81/php_info`
-
-## Important
-This build doesn't contain doctrine 
-Composer can be updated inside the **php** container
-All migrations should be run inside the **php** container
+4. You are able to work with PHP from inside the container```docker exec -it php sh```
+5. Run ```composer install```
+6. To test the application run the command ```php bin/console app:calculate-commissions input.txt```
+7. The result will be output in the console
+8. Run tests with ```./bin/phpunit```
