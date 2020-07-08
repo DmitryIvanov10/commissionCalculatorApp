@@ -14,4 +14,4 @@ Test app to calculate commissions
 5. Run ```composer install```
 6. To test the application run the command ```php bin/console app:calculate-commissions input.txt```
 7. The result will be output in the console
-8. Run tests with ```./bin/phpunit```
+8. Run tests with ```php bin/phpunit```
